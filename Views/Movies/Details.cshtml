@@ -1,0 +1,104 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Details
+@using Microsoft.AspNetCore.Identity
+@using Assignment3VasylMilchevskyi.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<h3>Movie</h3>
+@if (SignInManager.IsSignedIn(User) && UserManager.GetUserName(User).Equals(Model.Movie.createdById))
+{
+<form method="post" action="/Movies/DeleteMovie/@Model.Movie.id"
+      id="deleteForm">
+    @Html.AntiForgeryToken()
+    <div class="btn-group">
+        <a href="/Movies/Edit/@Model.Movie.id"
+           class="btn btn-primary btn-sm">
+            <i class="glyphicon glyphicon-edit"></i>
+            Edit movie info
+        </a>
+        <button id="submit" type="submit" class="btn btn-danger btn-sm">
+            <i class="glyphicon glyphicon-trash"></i>
+            Delete movie
+        </button>
+    </div>
+</form>
+<br/>
+}
+<div class="media">
+    <div class="media-left">
+        <img class="featurette-image"
+             src="@(String.IsNullOrEmpty(Model.Movie.imageUrl) ?
+        "http://placekitten.com/g/128/192" : Model.Movie.imageUrl)">
+    </div>
+    <div class="media-body">
+        <h4 class="panel-title">
+            @Model.Movie.title
+            <small>@(Model.Movie.created.HasValue ? Model.Movie.created.Value.ToString("d") : null)</small>
+        </h4>
+        <p class="text-info">@Model.Movie.description</p>
+        <h5 class="movie-rating">
+            Rating: @Model.Rating
+        </h5>
+        <h5 class="text-lowercase">
+            Created By: @(Model.Movie.createdById.Equals(null) ?
+        "Null" : Model.Movie.createdById)
+        </h5>
+        <a href=@(String.IsNullOrEmpty(Model.Movie.movieUrl) ? "http://placekitten.com/g/128/192" 
+        : Model.Movie.movieUrl)>Get Movie</a>
+    </div>
+</div>
+<br />
+@if (SignInManager.IsSignedIn(User))
+{
+    <form method="post" action="/Movies/RateMovie"
+          id="rateForm">
+        @Html.AntiForgeryToken()
+        <select id="ratingNum" name="ratingNum" class="dropdown">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+        </select>
+        <input type="text" id="movieId" name="movieId" hidden value="@Model.Movie.id" />
+
+        <button id="submit" type="submit" class="btn btn-sm btn-info">
+            <i class="glyphicon glyphicon-arrow-up"></i>
+            Rate movie
+        </button>
+    </form>
+}
+<br />
+@await Html.PartialAsync("_CommentsViewPartial")
+
+<br />
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <div class="row">
+    <div class="col-md-4">
+    <form method="post" action="/Movies/AddComment"
+          id="commentForm">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <textarea id="commentStr" name="commentStr" class="form-control"></textarea>
+            <input type="text" id="movieId" name="movieId" hidden value="@Model.Movie.id" />
+        </div>
+            <button id="comment" type="submit" class="btn btn-success">
+                Comment
+            </button>
+</form>
+        </div>
+        </div>
+}
+else
+{
+    <li><a asp-page="/Account/Login">Log in to leave Comments</a></li>
+
+}

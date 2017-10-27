@@ -1,0 +1,31 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Details
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="list-group">
+    @foreach (var comment in Model.Comments.comment)
+    {
+        <div class="media">
+            <div class="list-group-item pull-left info">
+                <h4 class="text-lowercase">@comment.createdById</h4><p class="small">said:</p>
+                <div class="list-group-item small well">
+                    <h5 class="list-group-item-text">@comment.comment</h5>
+                </div>
+                <p class="text-info small">@comment.created</p>
+                </div>
+                
+                @if (SignInManager.IsSignedIn(User) && UserManager.GetUserName(User).Equals(comment.createdById))
+                {
+                    <form method="post" action="/Movies/DeleteComment/@comment.id"
+                          id="deleteForm">
+                        @Html.AntiForgeryToken()
+                        <button id="submit" type="submit" class="btn btn-danger btn-sm">
+                            <i class="glyphicon glyphicon-trash"></i>
+                            Delete comment
+                        </button>
+                    </form>
+                }
+            </div>
+    }
+</div>

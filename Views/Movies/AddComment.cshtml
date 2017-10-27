@@ -1,0 +1,19 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Details
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="@Model.commentForm.Action" asp-antiforgery="true" asp-controller="Movies">
+            <div class="form-group">
+                @Html.LabelFor(model => model.commentForm.Comment.comment)
+                @Html.EditorFor(model => model.commentForm.Comment.comment, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                @Html.ValidationMessageFor(model => model.commentForm.Comment.comment, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class="btn btn-success">Comment</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

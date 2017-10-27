@@ -1,0 +1,36 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Index
+
+
+@foreach (var movie in Model.MovieList.movie)
+{
+    <div class="media">
+            <div class="media-left">
+                @if (!String.IsNullOrEmpty(movie.imageUrl))
+                {
+                    <img src="@movie.imageUrl">
+                }
+                else
+                {
+                    <img src="http://placekitten.com/g/128/192">
+                }
+            </div>
+            <div class="media-body">
+                <h4>@movie.title</h4>
+                <p>@movie.description</p>
+            </div>
+    </div>
+}
+
+@if (Model.MovieList.movie.Count() == 0)
+{
+    <p>No movies found</p>
+}
+
+@if (null != Model.MovieList.NextPageToken)
+{
+    <nav>
+        <ul class="pager">
+            <li><a href="?nextPageToken=@Model.MovieList.NextPageToken">More</a></li>
+        </ul>
+    </nav>
+}

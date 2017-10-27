@@ -1,0 +1,50 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Index
+@using Microsoft.AspNetCore.Identity
+@using Assignment3VasylMilchevskyi.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<h3>Movies</h3>
+@if (SignInManager.IsSignedIn(User))
+{
+<a href="/Movies/AddMovie" class="btn btn-success btn-sm" id="add-movie">
+    <i class="glyphicon glyphicon-plus"></i>
+    Add Movie
+</a>
+}
+
+@foreach (var movie in Model.MovieList.movie)
+{
+    <div class="media">
+        <a href="/Movies/Details/@movie.id">
+            <div class="media-left">
+                @if (!String.IsNullOrEmpty(movie.imageUrl))
+                {
+                    <img height="128" width="192" src="@movie.imageUrl">
+                }
+                else
+                {
+                    <img src="http://placekitten.com/g/128/192">
+                }
+            </div>
+            <div class="media-body">
+                <h4>@movie.title</h4>
+                <p>@movie.description</p>
+            </div>
+        </a>
+    </div>
+}
+
+@if (Model.MovieList.movie.Count() == 0)
+{
+    <p>No movies found</p>
+}
+
+@if (null != Model.MovieList.NextPageToken)
+{
+    <nav>
+        <ul class="pager">
+            <li><a href="?nextPageToken=@Model.MovieList.NextPageToken">More</a></li>
+        </ul>
+    </nav>
+}

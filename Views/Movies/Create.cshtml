@@ -1,0 +1,52 @@
+﻿@model Assignment3VasylMilchevskyi.ViewModels.Movies.Form
+
+
+<h2>View</h2>
+
+<h4>Movie</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form action="/Movies/@Model.FormAction/@Model.Movie.id" method="post" id="book-form" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(model => model.Movie.title)
+                @Html.EditorFor(model => model.Movie.title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Movie.title, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Movie.description)
+                @Html.EditorFor(model => model.Movie.description, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                @Html.ValidationMessageFor(model => model.Movie.description, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Movie.created)
+                @Html.EditorFor(model => model.Movie.created, new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                @Html.ValidationMessageFor(model => model.Movie.created, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Poster Image")
+                <input type="file" id="image" name="image" value="@Model.Movie.imageUrl" class="form-control">
+                @Html.HiddenFor(model => model.Movie.imageUrl)
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Movie File")
+                <input type="file" id="movieFile" name="movieFile" value="@Model.Movie.movieUrl" class="form-control">
+                @Html.HiddenFor(model => model.Movie.movieUrl)
+            </div>
+            <button type="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
